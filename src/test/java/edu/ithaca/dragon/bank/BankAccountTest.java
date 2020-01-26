@@ -14,7 +14,7 @@ class BankAccountTest {
     }
 
     @Test
-    void withdrawTest() {
+    void withdrawTest() throws InsufficientFundsException{
         BankAccount bankAccount = new BankAccount("a@b.com", 200);
         bankAccount.withdraw(100);
 
@@ -23,22 +23,20 @@ class BankAccountTest {
 
     @Test
     void isEmailValidTest(){
-        assertTrue(BankAccount.isEmailValid( "a@b.com"));
-        assertFalse( BankAccount.isEmailValid(""));
-        assertTrue(BankAccount.isEmailValid( "a@b.com"));
-        assertFalse( BankAccount.isEmailValid(""));
+        assertTrue(BankAccount.isEmailValid( "a@b.com")); //equivalence class for one @, an edge case (either one, none, or multiple)
+        assertFalse( BankAccount.isEmailValid("")); // one @ class, since it has none, it is an edge
         //prefix
-        assertFalse(BankAccount.isEmailValid("abc-@mail.com"));
-        assertFalse(BankAccount.isEmailValid("abc..@mail.com"));
-        assertFalse(BankAccount.isEmailValid(".abc@mail.com"));
-        assertFalse(BankAccount.isEmailValid("abc#def@mail.com"));
+        assertFalse(BankAccount.isEmailValid("abc-@mail.com")); //valid character class, is an edge case because it comes right before the @, and it cannot do that
+        assertFalse(BankAccount.isEmailValid("abc..@mail.com")); //valid character class, edge case, since two are next to each other
+        assertFalse(BankAccount.isEmailValid(".abc@mail.com")); //valid character class, edge case because it is in the front
+        assertFalse(BankAccount.isEmailValid("abc#def@mail.com")); //valid character class, not an edge case, just an invalid character
         //suffix
-        assertFalse(BankAccount.isEmailValid("abc.def@mail.c"));
-        assertFalse(BankAccount.isEmailValid("abc.def@mail#archive.com"));
-        assertFalse(BankAccount.isEmailValid("abc.def@mail"));
-        assertFalse(BankAccount.isEmailValid("abc.def@mail..com"));
+        assertFalse(BankAccount.isEmailValid("abc.def@mail.c"));//valid domain class, domain must have minimum 2 letters, edge case because it has one
+        assertFalse(BankAccount.isEmailValid("abc.def@mail#archive.com")); //valid character class, not an edge case
+        assertFalse(BankAccount.isEmailValid("abc.def@mail")); //valid domain class, an edge because it has none
+        assertFalse(BankAccount.isEmailValid("abc.def@mail..com")); // valid character class, edge case because it has 2 next to each other
         //more than one @
-        assertFalse(BankAccount.isEmailValid("abc@def@mail.com"));
+        assertFalse(BankAccount.isEmailValid("abc@def@mail.com")); //one @ class, edge case beause it has 2
     }
 
     @Test
