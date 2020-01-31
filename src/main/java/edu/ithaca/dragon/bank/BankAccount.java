@@ -1,4 +1,5 @@
 package edu.ithaca.dragon.bank;
+import java.lang.*;
 
 public class BankAccount {
 
@@ -31,14 +32,26 @@ public class BankAccount {
      * throws InsufficientFundsException if the amount is larger than the balance
      * If balance is negative, do nothing
      */
-    public void withdraw (double amount) throws InsufficientFundsException  {
-        if (balance >= amount && amount > 0) {
+    public void withdraw(double amount) throws InsufficientFundsException  {
+        if(amount < 0 ){
+        }
+        else if (balance >= amount && amount > 0) {
             balance -= amount;
         }
         else if(balance < amount){
             throw new InsufficientFundsException("Amount requested is more than in your account by " + (amount - balance));
         }
+    }
 
+    /**
+     *  isAmountValid that takes a double and returns true if the amount is positive
+     *  and has two decimal points or less, and false otherwise.
+     */
+    public static boolean isAmountValid(double amount){
+        if((amount * 100) % 1 != 0 && (amount < 0 ))
+            return false;
+        else
+            return true;
     }
 
 
