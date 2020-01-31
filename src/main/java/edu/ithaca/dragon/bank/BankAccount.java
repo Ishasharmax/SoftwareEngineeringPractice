@@ -1,6 +1,7 @@
 package edu.ithaca.dragon.bank;
 import java.lang.*;
 
+
 public class BankAccount {
 
     private String email;
@@ -32,8 +33,9 @@ public class BankAccount {
      * throws InsufficientFundsException if the amount is larger than the balance
      * If balance is negative, do nothing
      */
-    public void withdraw(double amount) throws InsufficientFundsException  {
-        if(amount < 0 ){
+    public void withdraw(double amount) throws InsufficientFundsException, IllegalArgumentException  {
+        if(amount < 0 && (amount * 100) % 1 != 0){
+            throw new IllegalArgumentException("invalid input");
         }
         else if (balance >= amount && amount > 0) {
             balance -= amount;

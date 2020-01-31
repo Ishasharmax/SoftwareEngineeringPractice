@@ -40,7 +40,11 @@ class BankAccountTest {
         assertEquals(1000, negative.getBalance());          //equivalence class of negative balance and not border case
         negative.withdraw(min);
         assertEquals(1000, negative.getBalance());          //equivalence class of negative balance and border case
+
+        BankAccount decNum = new BankAccount("a@b.com", 1000);
+        assertThrows(IllegalArgumentException.class, ()->decNum.withdraw(-3.876));
     }
+
 
     @Test
     void isEmailValidTest(){
@@ -61,14 +65,16 @@ class BankAccountTest {
     }
 
 
-    /*@Test
+   /* @Test
     void isAmountValidTest(){
+        //acceptable numbers
         assertTrue(BankAccount.isAmountValid(3));
         assertTrue(BankAccount.isAmountValid(3.12));
+        //negative numbers
         assertFalse(BankAccount.isAmountValid(-3));
-        assertFalse(BankAccount.isAmountValid(3.129));
         assertFalse(BankAccount.isAmountValid(-3.12));
-        assertFalse(BankAccount.isAmountValid(-3.129));
+        //More than two decimal places number
+        assertFalse(BankAccount.isAmountValid(3.129));
     }*/
 
     @Test
