@@ -34,7 +34,7 @@ public class BankAccount {
      * If balance is negative, do nothing
      */
     public void withdraw(double amount) throws InsufficientFundsException, IllegalArgumentException  {
-        if(amount < 0 && (amount * 100) % 1 != 0){
+        if((amount * 100) % 1 != 0){
             throw new IllegalArgumentException("invalid input");
         }
         else if (balance >= amount && amount > 0) {
@@ -50,14 +50,38 @@ public class BankAccount {
      *  and has two decimal points or less, and false otherwise.
      */
     public static boolean isAmountValid(double amount){
-        if((amount * 100) % 1 != 0 && (amount < 0 ))
+        if((amount * 100) % 1 != 0 || (amount < 0 ))
             return false;
         else
             return true;
     }
 
-
     public static boolean isEmailValid(String email){
         return email.matches("(\\w)+((_|\\.|-)+\\w+)?@(\\w)+\\.\\w{2,}$");
+    }
+
+    /**
+     * Deposits money into the bank account
+     * @param amount the amount to deposit
+     */
+    public void deposit(double amount) {
+        double newBalance = balance + amount;
+        balance = newBalance;
+    }
+
+    /**
+     * Transfer funds from one bank account object to another
+     * @param amount the amount of money to be transferred
+     * @post transfers amount from one bank acc. to another
+     */
+
+    public static void transfer(BankAccount src, BankAccount dest, double amount)throws InsufficientFundsException, IllegalArgumentException {
+        if(amount < 0 || (amount * 100) % 1 != 0){
+            throw new IllegalArgumentException("invalid input");
+        }
+        else{
+            src.withdraw(amount);
+            dest.deposit(amount);
+        }
     }
 }

@@ -42,7 +42,7 @@ class BankAccountTest {
         assertEquals(1000, negative.getBalance());          //equivalence class of negative balance and border case
 
         BankAccount decNum = new BankAccount("a@b.com", 1000);
-        assertThrows(IllegalArgumentException.class, ()->decNum.withdraw(-3.876));
+        assertThrows(IllegalArgumentException.class, ()->decNum.withdraw(3.898));
     }
 
 
@@ -64,8 +64,7 @@ class BankAccountTest {
         assertFalse(BankAccount.isEmailValid("abc@def@mail.com")); //one @ class, edge case because it has 2
     }
 
-
-   /* @Test
+   @Test
     void isAmountValidTest(){
         //acceptable numbers
         assertTrue(BankAccount.isAmountValid(3));
@@ -75,7 +74,32 @@ class BankAccountTest {
         assertFalse(BankAccount.isAmountValid(-3.12));
         //More than two decimal places number
         assertFalse(BankAccount.isAmountValid(3.129));
-    }*/
+    }
+
+   @Test
+    void transferTest() throws InsufficientFundsException{
+
+       BankAccount bankAccount = new BankAccount("a@b.com", 1000);
+       BankAccount bankAccount2 = new BankAccount("c@d.com", 500);
+
+       BankAccount.transfer(bankAccount, bankAccount2, 500);
+       assertEquals(1000, bankAccount2.getBalance());
+       assertEquals(500, bankAccount.getBalance());
+
+       BankAccount.transfer(bankAccount, bankAccount2, 0);
+       assertEquals(1000, bankAccount2.getBalance());
+       assertEquals(500, bankAccount.getBalance());
+
+       BankAccount.transfer(bankAccount, bankAccount2, 1);
+       assertEquals(1001, bankAccount2.getBalance());
+       assertEquals(499, bankAccount.getBalance());
+
+       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, -1));
+       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, -500));
+       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, 938.845));
+
+       assertThrows(InsufficientFundsException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, 938.84));
+   }
 
     @Test
     void constructorTest() {
