@@ -32,6 +32,7 @@ public class BankAccount {
      * @post reduces the balance by amount if amount is non-negative and smaller than balance
      * throws InsufficientFundsException if the amount is larger than the balance
      * If balance is negative, do nothing
+     * @post withdraws money from a bank account
      */
     public void withdraw(double amount) throws InsufficientFundsException, IllegalArgumentException  {
         if((amount * 100) % 1 != 0){
@@ -48,6 +49,7 @@ public class BankAccount {
     /**
      *  isAmountValid that takes a double and returns true if the amount is positive
      *  and has two decimal points or less, and false otherwise.
+     * @post checks whether amount is valid or not
      */
     public static boolean isAmountValid(double amount){
         if((amount * 100) % 1 != 0 || (amount < 0 ))
@@ -56,6 +58,12 @@ public class BankAccount {
             return true;
     }
 
+    /**
+     *  isAmountValid takes a String and returns true if the syntax of the input email is valid
+     *  otherwise returns false
+     * @post checks whether email is valid or not
+
+     */
     public static boolean isEmailValid(String email){
         return email.matches("(\\w)+((_|\\.|-)+\\w+)?@(\\w)+\\.\\w{2,}$");
     }
@@ -63,10 +71,16 @@ public class BankAccount {
     /**
      * Deposits money into the bank account
      * @param amount the amount to deposit
+     * @post deposits money to a bank account
      */
-    public void deposit(double amount) {
-        double newBalance = balance + amount;
-        balance = newBalance;
+    public void deposit(double amount) throws IllegalArgumentException {
+        if(amount< 0 || (amount * 100) % 1 != 0){
+            throw new IllegalArgumentException("invalid input");
+        }
+        else {
+            double newBalance = balance + amount;
+            balance = newBalance;
+        }
     }
 
     /**
@@ -74,7 +88,6 @@ public class BankAccount {
      * @param amount the amount of money to be transferred
      * @post transfers amount from one bank acc. to another
      */
-
     public static void transfer(BankAccount src, BankAccount dest, double amount)throws InsufficientFundsException, IllegalArgumentException {
         if(amount < 0 || (amount * 100) % 1 != 0){
             throw new IllegalArgumentException("invalid input");

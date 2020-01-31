@@ -42,7 +42,7 @@ class BankAccountTest {
         assertEquals(1000, negative.getBalance());          //equivalence class of negative balance and border case
 
         BankAccount decNum = new BankAccount("a@b.com", 1000);
-        assertThrows(IllegalArgumentException.class, ()->decNum.withdraw(3.898));
+        assertThrows(IllegalArgumentException.class, ()->decNum.withdraw(3.898));       //equivalence class of more than 2 decimals places & not border case
     }
 
 
@@ -66,15 +66,21 @@ class BankAccountTest {
 
    @Test
     void isAmountValidTest(){
-        //acceptable numbers
-        assertTrue(BankAccount.isAmountValid(3));
-        assertTrue(BankAccount.isAmountValid(3.12));
-        //negative numbers
-        assertFalse(BankAccount.isAmountValid(-3));
-        assertFalse(BankAccount.isAmountValid(-3.12));
+       int min = Integer.MIN_VALUE;
+       int max = Integer.MAX_VALUE;
+       //acceptable numbers
+        assertTrue(BankAccount.isAmountValid(300));         //equivalence class of positive amount and not border case
+        assertTrue(BankAccount.isAmountValid(max));         //equivalence class of positive amount and border case
+        assertTrue(BankAccount.isAmountValid(1));         //equivalence class of positive amount and border case
+        assertTrue(BankAccount.isAmountValid(0));         //equivalence class of zero amount and border case
+       //negative numbers
+        assertFalse(BankAccount.isAmountValid(-300));         //equivalence class of negative amount and not border case
+        assertFalse(BankAccount.isAmountValid(min));         //equivalence class of negative amount and border case
+        assertFalse(BankAccount.isAmountValid(-1));         //equivalence class of negative amount and border case
         //More than two decimal places number
-        assertFalse(BankAccount.isAmountValid(3.129));
-    }
+        assertFalse(BankAccount.isAmountValid(300.129));         //equivalence class of amount has more than 2 decimal places and not border case
+        assertFalse(BankAccount.isAmountValid(-300.129));         //equivalence class of negative amount, amount has more than 2 decimal places, & is not border case
+   }
 
    @Test
     void transferTest() throws InsufficientFundsException{
@@ -82,24 +88,46 @@ class BankAccountTest {
        BankAccount bankAccount = new BankAccount("a@b.com", 1000);
        BankAccount bankAccount2 = new BankAccount("c@d.com", 500);
 
-       BankAccount.transfer(bankAccount, bankAccount2, 500);
+       BankAccount.transfer(bankAccount, bankAccount2, 500);            //equivalence class of positive amount and not border case
        assertEquals(1000, bankAccount2.getBalance());
        assertEquals(500, bankAccount.getBalance());
 
-       BankAccount.transfer(bankAccount, bankAccount2, 0);
+       BankAccount.transfer(bankAccount, bankAccount2, 0);              //equivalence class of zero amount and border case
        assertEquals(1000, bankAccount2.getBalance());
        assertEquals(500, bankAccount.getBalance());
 
-       BankAccount.transfer(bankAccount, bankAccount2, 1);
+       BankAccount.transfer(bankAccount, bankAccount2, 1);              //equivalence class of positive amount and border case
        assertEquals(1001, bankAccount2.getBalance());
        assertEquals(499, bankAccount.getBalance());
 
-       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, -1));
-       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, -500));
-       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, 938.845));
-
-       assertThrows(InsufficientFundsException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, 938.84));
+       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, -1));           //equivalence class of negative amount and border case
+       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, -500));         //equivalence class of negative amount and not border case
+       assertThrows(IllegalArgumentException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, 938.845));      //equivalence class of amount has more than 2 decimal places
+       assertThrows(InsufficientFundsException.class, ()->BankAccount.transfer(bankAccount, bankAccount2, 938.84));     //equivalence class of amount has more than 2 decimal places
    }
+
+
+    @Test
+    void depositTest(){
+
+        BankAccount bankAccount = new BankAccount("a@b.com", 1000);
+
+        bankAccount.deposit(500);
+        assertEquals(1500, bankAccount.getBalance());       //equivalence class of positive amount and not border case
+        bankAccount.deposit(0);
+        assertEquals(1500, bankAccount.getBalance());       //equivalence class of zero amount and border case
+        bankAccount.deposit(1);
+        assertEquals(1501, bankAccount.getBalance());       //equivalence class of positive amount and border case
+
+        int min = Integer.MIN_VALUE;
+
+        //Negative numbers
+        assertThrows(IllegalArgumentException.class, ()->bankAccount.deposit(-1));      //equivalence class of Negative amount and border case
+        assertThrows(IllegalArgumentException.class, ()->bankAccount.deposit(-500));    //equivalence class of Negative amount and not border case
+        assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(min));           //equivalence class of Negative amount and border case
+        //Doubles with more than 2 decimal places
+        assertThrows(IllegalArgumentException.class, ()->bankAccount.deposit(56.844));  //equivalence class of amount has more than 2 decimal places and not border case
+    }
 
     @Test
     void constructorTest() {
@@ -107,6 +135,6 @@ class BankAccountTest {
         assertEquals("a@b.com", bankAccount.getEmail());
         assertEquals(200, bankAccount.getBalance());
         //check for exception thrown correctly
-        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));
+        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));        //equivalence class of not valid email and balace
     }
 }
