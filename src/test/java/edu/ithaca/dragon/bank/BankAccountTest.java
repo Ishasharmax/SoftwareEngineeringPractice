@@ -1,7 +1,5 @@
 package edu.ithaca.dragon.bank;
-
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class BankAccountTest {
@@ -136,5 +134,8 @@ class BankAccountTest {
         assertEquals(200, bankAccount.getBalance());
         //check for exception thrown correctly
         assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 100));        //equivalence class of not valid email and balace
+        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("a@b", 945.328));        //equivalence class of not valid starting balace
+        assertThrows(IllegalArgumentException.class, ()-> new BankAccount("", 945.328));        //equivalence class of not valid starting balace
+
     }
 }

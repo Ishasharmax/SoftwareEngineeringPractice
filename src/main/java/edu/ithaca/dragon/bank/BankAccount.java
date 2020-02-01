@@ -15,6 +15,9 @@ public class BankAccount {
             this.email = email;
             this.balance = startingBalance;
         }
+        else if ((startingBalance * 100) % 1 != 0){
+            throw new IllegalArgumentException("invalid input");
+        }
         else {
             throw new IllegalArgumentException("Email address: " + email + " is invalid, cannot create account");
         }
