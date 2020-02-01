@@ -11,6 +11,11 @@ class BankAccountTest {
 
         //fresh account
         assertEquals(1000, bankAccount.getBalance());               //equivalence class starting balance and not border cas
+        BankAccount bankAccount2 = new BankAccount("a@b.com", 0);
+        assertEquals(0, bankAccount2.getBalance());               //equivalence class starting balance and border cas
+        BankAccount bankAccount3 = new BankAccount("a@b.com", 1);
+        assertEquals(0, bankAccount2.getBalance());               //equivalence class starting balance and border cas
+
     }
 
     @Test
@@ -125,6 +130,7 @@ class BankAccountTest {
         assertThrows(IllegalArgumentException.class, () -> bankAccount.deposit(min));           //equivalence class of Negative amount and border case
         //Doubles with more than 2 decimal places
         assertThrows(IllegalArgumentException.class, ()->bankAccount.deposit(56.844));  //equivalence class of amount has more than 2 decimal places and not border case
+        assertThrows(IllegalArgumentException.class, ()->bankAccount.deposit(-56.8445));  //equivalence class of Negative amount that has more than 2 decimal places and not border case
     }
 
     @Test
